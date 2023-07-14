@@ -3,17 +3,13 @@ package com.example.recipe.presentation.home
 import com.example.recipe.common.test.MainDispatcherRule
 import com.example.recipe.domain.GetRecipesUseCase
 import com.example.recipe.domain.model.Recipe
+import com.example.recipe.presentation.extension.testWith
+import com.example.recipe.presentation.extension.inOrder
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import kotlin.time.ExperimentalTime
@@ -39,16 +35,14 @@ class HomeViewModelTest {
             val initialState = HomeState()
             val successState = initialState.updateRecipeList(result)
 
-            val testResults = arrayListOf<HomeState>()
-            val job = launch(rule.dispatcher) { viewModel.uiState.toList(destination = testResults) }
-
             every { useCase() } returns flowOf(result)
 
             // When
-            viewModel.getRecipeList()
+            val testResults = testWith(viewModel.uiState, rule.dispatcher) {
+                viewModel.getRecipeList()
+            }
 
             // Then
-            assertEquals(listOf(initialState, successState), testResults)
-            job.cancel()
+            testResults.inOrder(initialState, successState)
         }
 }
