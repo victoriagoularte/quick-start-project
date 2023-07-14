@@ -51,9 +51,4 @@ class HomeViewModelTest {
             assertEquals(listOf(initialState, successState), testResults)
             job.cancel()
         }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
 }
