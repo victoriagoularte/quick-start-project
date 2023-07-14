@@ -82,6 +82,8 @@ dependencies {
 
     // Saved state module for ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version")
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2'
+    implementation 'junit:junit:4.13.2'
 
     //test
     testImplementation 'app.cash.turbine:turbine:1.0.0'

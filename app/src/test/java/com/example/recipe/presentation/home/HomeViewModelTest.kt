@@ -1,5 +1,6 @@
 package com.example.recipe.presentation.home
 
+import com.example.recipe.common.test.MainDispatcherRule
 import com.example.recipe.domain.GetRecipesUseCase
 import com.example.recipe.domain.model.Recipe
 import io.mockk.every
@@ -10,12 +11,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import kotlin.time.ExperimentalTime
 
@@ -23,15 +22,11 @@ import kotlin.time.ExperimentalTime
 @ExperimentalTime
 class HomeViewModelTest {
 
-    private val useCase: GetRecipesUseCase = mockk()
-    private val dispatcher = UnconfinedTestDispatcher()
-    private val viewModel =
-        HomeViewModel(useCase = useCase, dispatcher = dispatcher)
+    @get:Rule
+    val rule = MainDispatcherRule()
 
-    @Before
-    fun setup() {
-        Dispatchers.setMain(Dispatchers.Unconfined)
-    }
+    private val useCase: GetRecipesUseCase = mockk()
+    private val viewModel = HomeViewModel(useCase = useCase, dispatcher = rule.dispatcher)
 
     @Test
     fun `getRecipeList should set correct states when useCase returns success`() =
@@ -45,7 +40,7 @@ class HomeViewModelTest {
             val successState = initialState.updateRecipeList(result)
 
             val testResults = arrayListOf<HomeState>()
-            val job = launch(dispatcher) { viewModel.uiState.toList(destination = testResults) }
+            val job = launch(rule.dispatcher) { viewModel.uiState.toList(destination = testResults) }
 
             every { useCase() } returns flowOf(result)
 
