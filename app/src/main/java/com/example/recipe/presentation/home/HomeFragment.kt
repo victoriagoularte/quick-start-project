@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -27,8 +28,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -97,7 +100,7 @@ fun HomeScreen(
                     columns = GridCells.Fixed(2),
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     items(recipeList) { item ->
                         RecipeCard(item)
@@ -111,7 +114,8 @@ fun HomeScreen(
 @Composable
 fun RecipeCard(recipe: Recipe) {
     Box(modifier = Modifier
-        .fillMaxSize(),
+        .fillMaxWidth()
+        .height(96.dp),
         contentAlignment = Alignment.BottomEnd,
     ) {
         AsyncImage(
@@ -121,11 +125,12 @@ fun RecipeCard(recipe: Recipe) {
                 .build(),
             contentDescription = null,
             modifier = Modifier
-                .clip(RoundedCornerShape(4.dp))
-
+                .clip(RoundedCornerShape(4.dp)),
+            contentScale = ContentScale.FillWidth
         )
         Text(
             text = recipe.name,
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(8.dp)
         )
     }
