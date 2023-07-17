@@ -9,8 +9,10 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
@@ -26,9 +28,15 @@ class HomeViewModel @Inject constructor(
 
     fun getRecipeList() {
         useCase()
-            .onStart { _uiState.value = HomeState(isLoading = true, recipeList = emptyList()) }
-            .onEach { _uiState.value = HomeState(isLoading = false, recipeList = it) }
+            .onStart { _uiState.value = _uiState.value.showLoading() }
+            .onEach { _uiState.value = _uiState.value.updateRecipeList(it) }
+            .onCompletion { _uiState.value = _uiState.value.hideLoading() }
+            .catch { /* todo: to implement */ }
             .flowOn(dispatcher)
             .launchIn(viewModelScope)
+    }
+
+    fun updateFilter(text: String) {
+       _uiState.value = _uiState.value.updateFilter(text)
     }
 }
