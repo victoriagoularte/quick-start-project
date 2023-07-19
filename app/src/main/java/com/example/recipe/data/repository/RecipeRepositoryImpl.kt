@@ -10,11 +10,11 @@ import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(private val dataSource: RecipeRemoteDataSource) : RecipeRepository {
 
-    override fun getRecipeList(): Flow<List<Recipe>> {
-        return dataSource.getRecipeList().map(::responseAsDomain)
+    override suspend fun getRecipeList(): List<Recipe> {
+        return dataSource.getRecipeList().responseAsDomain()
     }
 }
 
-fun responseAsDomain(response: List<RecipeResponse>) : List<Recipe> {
-    return response.map { Recipe(it.name, it.image) }
+fun List<RecipeResponse>.responseAsDomain() : List<Recipe> {
+    return this.map { Recipe(it.name, it.image) }
 }

@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface RecipeRemoteDataSource {
 
-    fun getRecipeList() : Flow<List<RecipeResponse>>
+    suspend fun getRecipeList() : List<RecipeResponse>
 }

@@ -9,12 +9,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,13 +23,16 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeState> = _uiState.asStateFlow()
 
     fun getRecipeList() {
-        useCase()
-            .onStart { _uiState.value = _uiState.value.showLoading() }
-            .onEach { _uiState.value = _uiState.value.updateRecipeList(it) }
-            .onCompletion { _uiState.value = _uiState.value.hideLoading() }
-            .catch { /* todo: to implement */ }
-            .flowOn(dispatcher)
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            val result = withContext(dispatcher) { useCase() }
+            try {
+                _uiState.value = _uiState.value.updateRecipeList(result)
+            } catch (e: Throwable) {
+                // todo
+            } finally {
+                // todo
+            }
+        }
     }
 
     fun updateFilter(text: String) {

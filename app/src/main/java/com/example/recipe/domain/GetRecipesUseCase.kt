@@ -5,5 +5,5 @@ import javax.inject.Inject
 
 class GetRecipesUseCase @Inject constructor(private val repository: RecipeRepository) {
 
-    operator fun invoke() = repository.getRecipeList()
+    suspend operator fun invoke() = repository.getRecipeList()
 }

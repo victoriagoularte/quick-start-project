@@ -3,12 +3,11 @@ package com.example.recipe.presentation.home
 import com.example.recipe.common.test.MainDispatcherRule
 import com.example.recipe.domain.GetRecipesUseCase
 import com.example.recipe.domain.model.Recipe
-import com.example.recipe.presentation.extension.testWith
 import com.example.recipe.presentation.extension.inOrder
-import io.mockk.every
+import com.example.recipe.presentation.extension.testWith
+import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -35,7 +34,7 @@ class HomeViewModelTest {
             val initialState = HomeState()
             val successState = initialState.updateRecipeList(result)
 
-            every { useCase() } returns flowOf(result)
+            coEvery { useCase() } returns result
 
             // When
             val testResults = testWith(viewModel.uiState, rule.dispatcher) {
