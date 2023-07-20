@@ -23,9 +23,9 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeState> = _uiState.asStateFlow()
 
     fun getRecipeList() {
-        viewModelScope.launch {
-            val result = withContext(dispatcher) { useCase() }
+        viewModelScope.launch(dispatcher) {
             try {
+                val result = useCase()
                 _uiState.value = _uiState.value.updateRecipeList(result)
             } catch (e: Throwable) {
                 // todo
