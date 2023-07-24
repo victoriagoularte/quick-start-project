@@ -32,13 +32,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.recipe.domain.model.Recipe
@@ -53,7 +51,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         viewModel.getRecipeList()
         return ComposeView(requireContext()).apply {
@@ -62,7 +60,7 @@ class HomeFragment : Fragment() {
                 HomeScreen(
                     recipeList = state.recipeList,
                     textFilter = state.textFilter,
-                    onFilterChange = viewModel::updateFilter
+                    onFilterChange = viewModel::updateFilter,
                 )
             }
         }
@@ -74,11 +72,11 @@ class HomeFragment : Fragment() {
 fun HomeScreen(
     textFilter: String,
     recipeList: List<Recipe>,
-    onFilterChange: (String) -> Unit
+    onFilterChange: (String) -> Unit,
 ) {
     RecipeTheme {
         Surface(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             Column {
                 TextField(
@@ -89,12 +87,12 @@ fun HomeScreen(
                         Icon(
                             imageVector = Icons.Filled.Search,
                             contentDescription = "Search",
-                            modifier = Modifier.padding(8.dp)
+                            modifier = Modifier.padding(8.dp),
                         )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(16.dp),
                 )
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
@@ -113,9 +111,10 @@ fun HomeScreen(
 
 @Composable
 fun RecipeCard(recipe: Recipe) {
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .height(96.dp),
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(96.dp),
         contentAlignment = Alignment.BottomEnd,
     ) {
         AsyncImage(
@@ -126,12 +125,12 @@ fun RecipeCard(recipe: Recipe) {
             contentDescription = null,
             modifier = Modifier
                 .clip(RoundedCornerShape(4.dp)),
-            contentScale = ContentScale.FillWidth
+            contentScale = ContentScale.FillWidth,
         )
         Text(
             text = recipe.name,
             fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
         )
     }
 }
@@ -149,7 +148,7 @@ fun HomeScreenPreview() {
         HomeScreen(
             recipeList = recipeList,
             textFilter = "",
-            onFilterChange = {}
+            onFilterChange = {},
         )
     }
 }

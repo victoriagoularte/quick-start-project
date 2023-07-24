@@ -18,25 +18,27 @@ import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val useCase: GetRecipesUseCase,
-    @DispatchersIo private val dispatcher: CoroutineDispatcher,
-) : ViewModel() {
+class HomeViewModel
+    @Inject
+    constructor(
+        private val useCase: GetRecipesUseCase,
+        @DispatchersIo private val dispatcher: CoroutineDispatcher,
+    ) : ViewModel() {
 
-    private var _uiState: MutableStateFlow<HomeState> = MutableStateFlow(HomeState())
-    val uiState: StateFlow<HomeState> = _uiState.asStateFlow()
+        private var _uiState: MutableStateFlow<HomeState> = MutableStateFlow(HomeState())
+        val uiState: StateFlow<HomeState> = _uiState.asStateFlow()
 
-    fun getRecipeList() {
-        useCase()
-            .onStart { _uiState.value = _uiState.value.showLoading() }
-            .onEach { _uiState.value = _uiState.value.updateRecipeList(it) }
-            .onCompletion { _uiState.value = _uiState.value.hideLoading() }
-            .catch { /* todo: to implement */ }
-            .flowOn(dispatcher)
-            .launchIn(viewModelScope)
+        fun getRecipeList() {
+            useCase()
+                .onStart { _uiState.value = _uiState.value.showLoading() }
+                .onEach { _uiState.value = _uiState.value.updateRecipeList(it) }
+                .onCompletion { _uiState.value = _uiState.value.hideLoading() }
+                .catch { /* todo: to implement */ }
+                .flowOn(dispatcher)
+                .launchIn(viewModelScope)
+        }
+
+        fun updateFilter(text: String) {
+            _uiState.value = _uiState.value.updateFilter(text)
+        }
     }
-
-    fun updateFilter(text: String) {
-       _uiState.value = _uiState.value.updateFilter(text)
-    }
-}

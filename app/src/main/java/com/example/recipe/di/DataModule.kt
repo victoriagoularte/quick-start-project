@@ -1,8 +1,8 @@
 package com.example.recipe.di
 
-import com.example.recipe.data.repository.RecipeRepositoryImpl
 import com.example.recipe.data.datasource.RecipeRemoteDataSource
 import com.example.recipe.data.datasource.RecipeRemoteDataSourceImpl
+import com.example.recipe.data.repository.RecipeRepositoryImpl
 import com.example.recipe.domain.repository.RecipeRepository
 import dagger.Binds
 import dagger.Module
@@ -15,11 +15,11 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindRecipeRepository(
-        recipeRepositoryImpl: RecipeRepositoryImpl
-    ) : RecipeRepository
+        recipeRepositoryImpl: RecipeRepositoryImpl,
+    ): RecipeRepository
 
     @Binds
     abstract fun bindRecipeDataSource(
-        recipeRemoteDataSourceImpl: RecipeRemoteDataSourceImpl
-    ) : RecipeRemoteDataSource
+        recipeRemoteDataSourceImpl: RecipeRemoteDataSourceImpl,
+    ): RecipeRemoteDataSource
 }

@@ -3,8 +3,8 @@ package com.example.recipe.presentation.home
 import com.example.recipe.common.test.MainDispatcherRule
 import com.example.recipe.domain.GetRecipesUseCase
 import com.example.recipe.domain.model.Recipe
-import com.example.recipe.presentation.extension.testWith
 import com.example.recipe.presentation.extension.inOrder
+import com.example.recipe.presentation.extension.testWith
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi

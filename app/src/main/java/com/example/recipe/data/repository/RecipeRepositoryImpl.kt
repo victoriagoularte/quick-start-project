@@ -8,13 +8,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class RecipeRepositoryImpl @Inject constructor(private val dataSource: RecipeRemoteDataSource) : RecipeRepository {
+class RecipeRepositoryImpl
+    @Inject
+    constructor(private val dataSource: RecipeRemoteDataSource) : RecipeRepository {
 
-    override fun getRecipeList(): Flow<List<Recipe>> {
-        return dataSource.getRecipeList().map(::responseAsDomain)
+        override fun getRecipeList(): Flow<List<Recipe>> {
+            return dataSource.getRecipeList().map(::responseAsDomain)
+        }
     }
-}
 
-fun responseAsDomain(response: List<RecipeResponse>) : List<Recipe> {
+fun responseAsDomain(response: List<RecipeResponse>): List<Recipe> {
     return response.map { Recipe(it.name, it.image) }
 }

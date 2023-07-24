@@ -19,15 +19,18 @@ object NetworkModule {
     @Provides
     fun providesHttpLoggingInterceptor() = HttpLoggingInterceptor()
         .apply {
-            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
                 HttpLoggingInterceptor.Level.NONE
+            }
         }
 
     @Singleton
     @Provides
     fun providesOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        defaultInterceptorQueryParameter: DefaultQueryParameterInterceptor
+        defaultInterceptorQueryParameter: DefaultQueryParameterInterceptor,
     ): OkHttpClient =
         OkHttpClient
             .Builder()
@@ -37,7 +40,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesRetrofit(okHttpClient: OkHttpClient) : Retrofit {
+    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BuildConfig.BACKEND_URL)

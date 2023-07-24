@@ -29,7 +29,6 @@ fun <State, Event> TestScope.testWith(
     dispatcher: CoroutineDispatcher,
     block: () -> Unit,
 ): Pair<ArrayList<State>, ArrayList<Event>> {
-
     var jobState: Job? = null
     var jobEvent: Job? = null
     val stateResult = arrayListOf<State>()
