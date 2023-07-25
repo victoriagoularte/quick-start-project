@@ -1,0 +1,19 @@
+# Rules: https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml
+# Compose: https://detekt.dev/docs/introduction/compose
+style:
+  MaxLineLength:
+    active: true
+    maxLineLength: 250
+  MagicNumber:
+    active: true
+    ignorePropertyDeclaration: true
+  UnusedPrivateMember:
+    active: true
+    ignoreAnnotated: [ 'Preview' ]
+
+naming:
+  FunctionNaming:
+    active: true
+    functionPattern: '[a-zA-Z][a-zA-Z]*'
+    ignoreAnnotated: [ 'Composable' ]
+

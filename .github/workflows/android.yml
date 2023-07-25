@@ -1,0 +1,38 @@
+## Checkout our repository ###
+- name: Checkout
+  uses: actions/checkout@v2.3.3
+
+- name: Set up our JDK environment
+  uses: actions/setup-java@v1.4.3
+  with:
+    java-version: 1.8
+
+## Build all our Build Types at once ##
+- name: Build all artifacts
+  id: buildAllApks
+  uses: eskatos/gradle-command-action@v1.3.3
+  with:
+    gradle-version: current
+    wrapper-cache-enabled: true
+    dependencies-cache-enabled: true
+    configuration-cache-enabled: true
+    arguments: assembleDebug
+
+## ktlint check
+- name: Run Kotlin Linter
+  run: ./gradlew ktlintCheck
+
+## Detekt
+- name: Run Detekt
+  run: ./gradlew detekt
+  if: success() || failure()
+
+- name: Archieve Detekt reports on failure
+  uses: actions/upload-artifact@v3
+  if: failure()
+  with:
+      name: code_linting
+      path: "**/build/reports/detekt/*.html"
+
+- name: Run Unit Tests
+  run: ./gradlew testDebugUnitTest
